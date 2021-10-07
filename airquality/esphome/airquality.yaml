@@ -1,0 +1,143 @@
+esphome:
+  name: airquality
+  platform: ESP32
+  board: esp32dev
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: "xxxxxxxxxxxxxxxxxxxxxxxxx"
+
+wifi:
+  ssid: "wifi_SSID"
+  password: "wifi_password"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Airquality Fallback Hotspot"
+    password: "xxxxxxxxx"
+
+captive_portal:
+
+# for PM5003ST
+uart:
+  rx_pin: GPIO13
+  baud_rate: 9600
+
+# for sgp30
+i2c:
+  - sda: GPIO17
+    scl: GPIO16
+    scan: true
+
+# for screen
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+
+# used to take time from homeassistant
+time:
+  - platform: homeassistant
+    id: hass_time
+
+sensor:
+  - platform: pmsx003
+    type: PMS5003ST
+    pm_1_0:
+      id: pm_1_0
+      name: "Voron PM <1µm Concentration"
+    pm_2_5:
+      id: pm_2_5
+      name: "Voron PM <2.5µm Concentration"
+    pm_10_0:
+      id: pm_10_0
+      name: "Voron PM <10µm Concentration"
+    temperature:
+      name: "Voron Temperature"
+      id: voron_temp
+    humidity:
+      name: "Voron Humidity"
+      id: voron_humidity
+    formaldehyde:
+      id: formaldehyde
+      name: "Voron Formaldehyde"
+
+  - platform: sgp30
+    eco2:
+      name: "Voron CO2"
+      id: co2
+      accuracy_decimals: 1
+    tvoc:
+      name: "Voron TVOC"
+      id: tvoc
+      accuracy_decimals: 1
+    store_baseline: yes
+    address: 0x58
+    update_interval: 1s
+    compensation:
+      temperature_source: voron_temp
+      humidity_source: voron_humidity
+
+font:
+  - file: "fonts/arial.ttf"
+    id: font_title
+    size: 18
+  - file: "fonts/arial.ttf"
+    id: font_value
+    size: 15
+  - file: "fonts/arial.ttf"
+    id: arial25
+    size: 25
+  - file: "fonts/arial.ttf"
+    id: arial20
+    size: 20
+    
+image:
+    - file: "images/voron.png"
+      id: voron_png
+      
+display:
+  - platform: waveshare_epaper
+    cs_pin: GPIO05
+    dc_pin: GPIO04
+    busy_pin: GPIO02
+    model: 2.90inv2
+    full_update_every: 60
+    reset_pin: GPIO14
+    rotation: 90
+    
+    lambda: |-
+      it.print(0+5, 0, id(font_title), "PM1.0");
+      it.print(77+5, 0, id(font_title), "PM2.5");
+      it.print(154+5, 0, id(font_title), "PM10");
+      it.print(231+5, 0, id(font_title), "HCHO");      
+      
+      it.printf(0+5, 21, id(font_value), "%.1f", id(pm_1_0).state);
+      it.printf(77+5, 21, id(font_value), "%.0f", id(pm_2_5).state);
+      it.printf(154+5, 21, id(font_value), "%.1f", id(pm_10_0).state);
+      it.printf(231+5, 21, id(font_value), "%.0f", id(formaldehyde).state);
+
+      it.line(0, 37, 296, 37);
+      
+      it.print(0+5, 39, id(font_title), "Temp");
+      it.print(77+5, 39, id(font_title), "Moist");
+      it.print(154+5, 39, id(font_title), "CO2");
+      it.print(231+5, 39, id(font_title), "VOC");
+      it.printf(0+5, 60, id(font_value), "%.1f°C", id(voron_temp).state);
+      it.printf(77+5, 60, id(font_value), "%.0f%%", id(voron_humidity).state);
+      it.printf(154+5, 60, id(font_value), "%.0f", id(co2).state);
+      it.printf(231+5, 60, id(font_value), "%.1f", id(tvoc).state);
+
+      it.line(0, 77, 296, 77);
+
+      auto time = id(hass_time).now();
+      it.print(110+3, 79, id(arial25), "iBax Voron");
+      it.strftime(78+3, 105, id(arial20), "%d-%m-%Y %H:%M:%S", time);
+      it.image(0+5, 81, id(voron_png));
+
+web_server:
+  port: 80
