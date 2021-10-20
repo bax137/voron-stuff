@@ -7,7 +7,7 @@ The sensors are:
 - CO2 and VOC: sgp30
 The screen is a Waveshare 2.9 inch E-Paper Gray (https://www.amazon.fr/gp/product/B071LGVVL1/ref=ppx_yo_dt_b_asin_title_o01_s00).
 
-After creating a new configuration in ESPHome, complete the yaml file with the content of airquality.yaml file. Copy the fonts and images directories in the fonfiguration directory of ESPHome (for home assistant it's config/esphome).
+After creating a new configuration in ESPHome, complete the yaml file with the content of airquality.yaml file. Copy the fonts and images directories in the configuration directory of ESPHome (for home assistant it's config/esphome).
 
 The pins used for this configuration:
 
