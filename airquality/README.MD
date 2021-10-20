@@ -1,4 +1,4 @@
-This project is based on ESPHome to generate and download the code on the ESP32.
+This project is based on ESPHome to generate and upload the code on the ESP32.
 
 I use an ESP32 38 pins, but any ESP32/8266 which can use 1 uart, 1 spi and 1 i2c at the same time will work.
 
