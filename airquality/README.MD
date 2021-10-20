@@ -12,16 +12,16 @@ After creating a new configuration in ESPHome, complete the yaml file with the c
 The pins used for this configuration:
 
 sgp30:
-sda: GPIO17
-scl: GPIO16
+- sda: GPIO17
+- scl: GPIO16
 
 PM5003ST:
-tx pin : GPIO13
+- tx pin : GPIO13
 
 Screen:
-clock: GPIO18
-out: GPIO23
-cs: GPIO05
-dc: GPIO04
-busy: GPIO02
-reset: GPIO14
+- clock: GPIO18
+- out: GPIO23
+- cs: GPIO05
+- dc: GPIO04
+- busy: GPIO02
+- reset: GPIO14
