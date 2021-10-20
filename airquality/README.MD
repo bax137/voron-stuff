@@ -6,7 +6,7 @@ The sensors are:
 - PM, HCHO, temperature and moisture: PM5003ST
 - CO2 and VOC: sgp30
 
-The screen is a Waveshare 2.9 inch E-Paper Gray (https://www.amazon.fr/gp/product/B071LGVVL1).
+The screen is a Waveshare 2.9 inch E-Paper Gray [Amazon fr link](https://www.amazon.fr/gp/product/B071LGVVL1){:target="_blank"}https://www.amazon.fr/gp/product/B071LGVVL1
 
 After creating a new configuration in ESPHome, complete the yaml file with the content of airquality.yaml file. Copy the fonts and images directories in the configuration directory of ESPHome (for home assistant it's config/esphome).
 
