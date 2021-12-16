@@ -108,9 +108,10 @@ display:
     dc_pin: GPIO04
     busy_pin: GPIO02
     model: 2.90inv2
-    full_update_every: 60
+    full_update_every: 120
     reset_pin: GPIO14
     rotation: 90
+    update_interval: 60s
     
     lambda: |-
       it.print(0+5, 0, id(font_title), "PM1.0");
@@ -138,7 +139,7 @@ display:
 
       auto time = id(hass_time).now();
       it.print(110+3, 79, id(arial25), "iBax Voron");
-      it.strftime(78+3, 105, id(arial20), "%d-%m-%Y %H:%M:%S", time);
+      it.strftime(93+3, 105, id(arial20), "%d-%m-%Y %H:%M:%S", time);
       it.image(0+5, 81, id(voron_png));
 
 web_server:
