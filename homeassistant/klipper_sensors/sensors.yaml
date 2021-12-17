@@ -1,0 +1,221 @@
+- platform: mqtt
+  name: voron_hotend_actual
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "extruder" in value_json.status %}
+                      {% if "temperature" in value_json.status.extruder %}
+                        {{ value_json.status.extruder.temperature | float | round(1) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                        {{ states(entity_id) }}
+                    {% endif %}'
+  device_class: temperature
+  unit_of_measurement: '°C'
+- platform: mqtt
+  name: voron_hotend_target
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "extruder" in value_json.status %}
+                      {% if "target" in value_json.status.extruder %}
+                        {{ value_json.status.extruder.target | float(0) | round(1) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}' 
+  device_class: temperature
+  unit_of_measurement: '°C'
+- platform: mqtt
+  name: voron_bed_target
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "heater_bed" in value_json.status %}
+                      {% if "target" in value_json.status.heater_bed %}
+                        {{ value_json.status.heater_bed.target | float(0) | round(1) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}' 
+  device_class: temperature
+  unit_of_measurement: '°C'
+- platform: mqtt
+  name: voron_bed_actual
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "heater_bed" in value_json.status %}
+                      {% if "temperature" in value_json.status.heater_bed %}
+                        {{ value_json.status.heater_bed.temperature | float | round(1) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}' 
+  device_class: temperature
+  unit_of_measurement: '°C'
+- platform: mqtt
+  name: voron_state
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "print_stats" in value_json.status %}
+                      {% if "state" in value_json.status.print_stats %}
+                          {{ value_json.status.print_stats.state }}
+                      {% else %}
+                          {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}' 
+- platform: mqtt
+  name: voron_current_print
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "print_stats" in value_json.status %}
+                      {% if "filename" in value_json.status.print_stats %}
+                          {{ value_json.status.print_stats.filename }}
+                      {% else %}
+                          {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                          {{ states(entity_id) }}
+                    {% endif %}' 
+- platform: mqtt
+  name: voron_current_progress
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "display_status" in value_json.status %}
+                      {% if "progress" in value_json.status.display_status %}
+                        {{ (value_json.status.display_status.progress * 100) | float | round(0) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}' 
+  unit_of_measurement: '%'
+- platform: mqtt
+  name: voron_print_time
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "print_stats" in value_json.status %}
+                      {% if "print_duration" in value_json.status.print_stats %}
+                        {{ value_json.status.print_stats.print_duration * 100 | timestamp_custom("%H:%M:%S", 0) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+- platform: mqtt
+  name: voron_print_time_raw
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "print_stats" in value_json.status %}
+                      {% if "print_duration" in value_json.status.print_stats %}
+                        {{ value_json.status.print_stats.print_duration }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+- platform: mqtt
+  name: voron_time_remaining
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "display_status" in value_json.status %}
+                      {% if "progress" in value_json.status.display_status %}
+                        {{ (((states.sensor.voron_print_time_raw/value_json.status.display_status.progress - states.sensor.voron_print_time_raw) if value_json.status.display_status.progress>0 else 0)) | timestamp_custom("%H:%M:%S", 0) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+- platform: mqtt
+  name: voron_eta
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "display_status" in value_json.status %}
+                      {% if "progress" in value_json.status.display_status %}
+                        {{ (as_timestamp(now())+2*60*60+((states.sensor.voron_print_time_raw/value_json.status.display_status.progress - states.sensor.voron_print_time_raw) if value_json.status.display_status.progress >0 else 0)) | timestamp_custom("%H:%M:%S", 0) }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+- platform: mqtt
+  name: voron_nozzletemp
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "extruder" in value_json.status %}
+                      {% if "temperature" in value_json.status.extruder %}
+                        {{ [( value_json.status.extruder.temperature | float | round(1)| string)," / ",( states.sensor.voron_hotend_target.state | float(0) | round(1) | string)]|join }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+- platform: mqtt
+  name: voron_bedtemp
+  availability_topic: "ibax_voron/availability"
+  payload_not_available: shutdown
+  payload_available: ready
+  state_topic: "ibax_voron/klipper/status"
+  value_template: '{% if "heater_bed" in value_json.status %}
+                      {% if "temperature" in value_json.status.heater_bed %}
+                        {{ [( value_json.status.heater_bed.temperature | float | round(1)| string)," / ",( states.sensor.voron_bed_target.state | float(0) | round(1) | string)]|join }}
+                      {% else %}
+                        {{ states(entity_id) }}
+                      {% endif %}
+                    {% else %}
+                      {{ states(entity_id) }}
+                    {% endif %}'
+
+- platform: rest
+  scan_interval: 10
+  name: gcode_preview
+  resource_template: "{% if states(('sensor.voron_current_print')) != 'unavailable' %}
+                        http://<ip_printer>:7125/server/files/metadata?filename={{ states(('sensor.voron_current_print')) }}
+                        {% else %}
+                        https://<ip_ha>:8123/local/no_preview.json
+                        {% endif %}"
+  json_attributes_path: "$.result.thumbnails.[1]"
+  json_attributes:
+    - width
+    - height
+    - size
+    - relative_path
+  value_template: "OK"
+
