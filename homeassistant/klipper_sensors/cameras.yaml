@@ -2,7 +2,7 @@
   name: klipper_gcode_preview
   still_image_url: >
     {% if states.sensor.gcode_preview.attributes["relative_path"] == "" %}
-        https://<ip_ha>:8123/local/voron.png
+        https://<ip_ha>:8123/local/no_preview.png
     {% else %}
         http://<ip_printer>:7125/server/files/gcodes/{{ states.sensor.gcode_preview.attributes["relative_path"] }}
     {% endif %}
