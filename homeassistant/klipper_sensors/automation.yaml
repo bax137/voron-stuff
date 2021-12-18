@@ -2,13 +2,14 @@ alias: Voron payload available
 description: ''
 trigger:
   - platform: mqtt
-    topic: ibax_voron/klipper/status
+    topic: <instance_name>/klipper/status
 condition: []
 action:
   - service: mqtt.publish
     data:
-      topic: ibax_voron/availability
+      topic: <instance_name>/availability
       payload_template: >-
-        {% if "webhooks" in trigger.payload_json.status %} {{
-        trigger.payload_json.status.webhooks.state }} {% endif %}
+        {% if "webhooks" in trigger.payload_json.status %}
+          {{ trigger.payload_json.status.webhooks.state }}
+        {% endif %}
 mode: single

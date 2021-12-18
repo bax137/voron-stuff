@@ -1,9 +1,9 @@
 - platform: mqtt
   name: voron_hotend_actual
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "extruder" in value_json.status %}
                       {% if "temperature" in value_json.status.extruder %}
                         {{ value_json.status.extruder.temperature | float | round(1) }}
@@ -17,10 +17,10 @@
   unit_of_measurement: '°C'
 - platform: mqtt
   name: voron_hotend_target
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "extruder" in value_json.status %}
                       {% if "target" in value_json.status.extruder %}
                         {{ value_json.status.extruder.target | float(0) | round(1) }}
@@ -34,10 +34,10 @@
   unit_of_measurement: '°C'
 - platform: mqtt
   name: voron_bed_target
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "heater_bed" in value_json.status %}
                       {% if "target" in value_json.status.heater_bed %}
                         {{ value_json.status.heater_bed.target | float(0) | round(1) }}
@@ -51,10 +51,10 @@
   unit_of_measurement: '°C'
 - platform: mqtt
   name: voron_bed_actual
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "heater_bed" in value_json.status %}
                       {% if "temperature" in value_json.status.heater_bed %}
                         {{ value_json.status.heater_bed.temperature | float | round(1) }}
@@ -68,10 +68,10 @@
   unit_of_measurement: '°C'
 - platform: mqtt
   name: voron_state
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "print_stats" in value_json.status %}
                       {% if "state" in value_json.status.print_stats %}
                           {{ value_json.status.print_stats.state }}
@@ -83,10 +83,10 @@
                     {% endif %}' 
 - platform: mqtt
   name: voron_current_print
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "print_stats" in value_json.status %}
                       {% if "filename" in value_json.status.print_stats %}
                           {{ value_json.status.print_stats.filename }}
@@ -98,10 +98,10 @@
                     {% endif %}' 
 - platform: mqtt
   name: voron_current_progress
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "display_status" in value_json.status %}
                       {% if "progress" in value_json.status.display_status %}
                         {{ (value_json.status.display_status.progress * 100) | float | round(0) }}
@@ -114,10 +114,10 @@
   unit_of_measurement: '%'
 - platform: mqtt
   name: voron_print_time
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "print_stats" in value_json.status %}
                       {% if "print_duration" in value_json.status.print_stats %}
                         {{ value_json.status.print_stats.print_duration | float | int | timestamp_custom("%H:%M:%S", True) }}
@@ -129,10 +129,10 @@
                     {% endif %}'
 - platform: mqtt
   name: voron_print_time_raw
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "print_stats" in value_json.status %}
                       {% if "print_duration" in value_json.status.print_stats %}
                         {{ value_json.status.print_stats.print_duration }}
@@ -144,10 +144,10 @@
                     {% endif %}'
 - platform: mqtt
   name: voron_time_remaining
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "display_status" in value_json.status %}
                       {% if "progress" in value_json.status.display_status %}
                         {{ (((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw.state | float(0) ) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S", 0) }}
@@ -159,10 +159,10 @@
                     {% endif %}'
 - platform: mqtt
   name: voron_eta
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "display_status" in value_json.status %}
                       {% if "progress" in value_json.status.display_status %}
                         {{ (as_timestamp(now())+2*60*60+((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw | float(0)) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S", 0) }}
@@ -174,10 +174,10 @@
                     {% endif %}'
 - platform: mqtt
   name: voron_nozzletemp
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "extruder" in value_json.status %}
                       {% if "temperature" in value_json.status.extruder %}
                         {{ [( value_json.status.extruder.temperature | float | round(1)| string)," / ",( states.sensor.voron_hotend_target.state | float(0) | round(1) | string)]|join }}
@@ -189,10 +189,10 @@
                     {% endif %}'
 - platform: mqtt
   name: voron_bedtemp
-  availability_topic: "ibax_voron/availability"
+  availability_topic: "<instance_name>/availability"
   payload_not_available: shutdown
   payload_available: ready
-  state_topic: "ibax_voron/klipper/status"
+  state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "heater_bed" in value_json.status %}
                       {% if "temperature" in value_json.status.heater_bed %}
                         {{ [( value_json.status.heater_bed.temperature | float | round(1)| string)," / ",( states.sensor.voron_bed_target.state | float(0) | round(1) | string)]|join }}
@@ -207,7 +207,7 @@
   scan_interval: 10
   name: gcode_preview
   resource_template: "{% if states(('sensor.voron_current_print')) != 'unavailable' %}
-                        http://<ip_printer>:7125/server/files/metadata?filename={{ states(('sensor.voron_current_print')) }}
+                        http://<printer_ip>:7125/server/files/metadata?filename={{ states(('sensor.voron_current_print')) }}
                         {% else %}
                         https://<ip_ha>:8123/local/no_preview.json
                         {% endif %}"

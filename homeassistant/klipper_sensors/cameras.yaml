@@ -4,12 +4,12 @@
     {% if states.sensor.gcode_preview.attributes["relative_path"] == "" %}
         https://<ip_ha>:8123/local/no_preview.png
     {% else %}
-        http://<ip_printer>:7125/server/files/gcodes/{{ states.sensor.gcode_preview.attributes["relative_path"] }}
+        http://<printer_ip>:7125/server/files/gcodes/{{ states.sensor.gcode_preview.attributes["relative_path"] }}
     {% endif %}
   scan_interval: 5
   content_type: image/png
 
 - platform: mjpeg
   name: Voron Cam
-  still_image_url: http://<ip_printer>/webcam/?action=snapshot
-  mjpeg_url: http://<ip_printer>/webcam/?action=stream
+  still_image_url: http://<printer_ip>/webcam/?action=snapshot
+  mjpeg_url: http://<printer_ip>/webcam/?action=stream
