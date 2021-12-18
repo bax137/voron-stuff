@@ -150,7 +150,7 @@
   state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "display_status" in value_json.status %}
                       {% if "progress" in value_json.status.display_status %}
-                        {{ (((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw.state | float(0) ) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S", 0) }}
+                        {{ (((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw.state | float(0) ) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S", True) }}
                       {% else %}
                         {{ states(entity_id) }}
                       {% endif %}
@@ -165,7 +165,7 @@
   state_topic: "<instance_name>/klipper/status"
   value_template: '{% if "display_status" in value_json.status %}
                       {% if "progress" in value_json.status.display_status %}
-                        {{ (as_timestamp(now())+2*60*60+((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw | float(0)) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S", 0) }}
+                        {{ (as_timestamp(now())+2*60*60+((states.sensor.voron_print_time_raw.state | float(0) / value_json.status.display_status.progress | float - states.sensor.voron_print_time_raw | float(0)) if value_json.status.display_status.progress > 0 else 0)) | int | timestamp_custom("%H:%M:%S",True) }}
                       {% else %}
                         {{ states(entity_id) }}
                       {% endif %}
