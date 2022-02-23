@@ -1,0 +1,15 @@
+[Unit]
+Description=Backup config to NasBax
+Requires=network.target
+After=network.target
+Before=shutdown.target halt.target poweroff.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStop=/bin/bash /home/pi/ibax/backup.sh
+User=pi
+
+[Install]
+WantedBy=multi-user.target
